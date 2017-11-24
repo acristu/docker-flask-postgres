@@ -1,4 +1,4 @@
 node {
 	checkout scm 
-	sh "./jenkins.sh"
+	sh "bash ./jenkins.sh"
 }
