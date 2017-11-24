@@ -7,40 +7,13 @@ node {
         checkout scm
     }
 
-    stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
-
-        app = docker.build("team01/docker-flask-sample")
-    }
-
-    stage('Test image') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach ;-) */
-
-        app.inside {
-            sh 'echo "Tests passed"'
-        }
-    }
-
+    
     stage('Push image') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('t01u01.azurecr.io', 'docker-hub-credentials') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-        }
+       azureWebAppPublish appName: 'dockerapp987', azureCredentialsId: 'mySP', 
+	   dockerFilePath: 'Dockerfile', dockerImageName: '', dockerImageTag: '', 
+	   dockerRegistryEndpoint: [credentialsId: 'e33dd4a6-f6bb-45ec-aa77-b71ba9db5794', url: 't01u01.azurecr.io'], 
+	   filePath: '', publishType: 'docker', resourceGroup: 'roteam01rg', slotName: '', sourceDirectory: '', targetDirectory: ''
+
     }
 
-	stage('Deploy') {
-		azureWebAppPublish appName: 'dockerapp987', azureCredentialsId: 'mySP', 
-			dockerImageName: '', 
-			dockerImageTag: '', 
-			dockerRegistryEndpoint: [], filePath: '', publishType: 'file', 
-			resourceGroup: 'roteam01rg', 
-			slotName: '', sourceDirectory: '', targetDirectory: ''
-		
-	}
 }
