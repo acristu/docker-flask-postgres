@@ -33,4 +33,14 @@ node {
             app.push("latest")
         }
     }
+
+	stage('Deploy') {
+		azureWebAppPublish appName: 'dockerapp987', azureCredentialsId: 'mySP', 
+			dockerImageName: '', 
+			dockerImageTag: '', 
+			dockerRegistryEndpoint: [], filePath: '', publishType: 'file', 
+			resourceGroup: 'roteam01rg', 
+			slotName: '', sourceDirectory: '', targetDirectory: ''
+		
+	}
 }
